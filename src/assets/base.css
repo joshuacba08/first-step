@@ -1,0 +1,36 @@
+/*importo mis fuentes*/
+@import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
+
+/* retiro los margins y paddings por defecto */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/*declaro mis variables de css*/
+:root {
+  /*Primary*/
+
+  --purple: hsl(259, 100%, 65%);
+  --light-red: hsl(0, 100%, 67%);
+
+  /*Neutral*/
+
+  --white: hsl(0, 0%, 100%);
+  --off-white: hsl(0, 0%, 94%);
+  --light-grey: hsl(0, 0%, 86%);
+  --mokey-grey: hsl(0, 1%, 44%);
+  --off-black: hsl(0, 0%, 8%);
+
+  /*Font*/
+  --poppins: "Poppins", sans-serif;
+}
+
+html{
+  font-family: var(--poppins);
+}
+
+body{
+  background-color: var(--off-white);
+}
