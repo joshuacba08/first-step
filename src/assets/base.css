@@ -34,3 +34,10 @@ html{
 body{
   background-color: var(--off-white);
 }
+
+button{
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}

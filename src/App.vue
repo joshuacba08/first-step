@@ -1,17 +1,62 @@
 <script setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
-// el ref es un objeto que contiene una propiedad value que es reactiva
-// por lo cual me permite interpolarla en el template con los cambios que se hagan
-const birthday = ref({
-  day: 0,
-  month: 0,
-  year: 0,
+const birthday = {
+  day: null,
+  month: null,
+  year: null,
+};
+
+const birthdayErrors = reactive({
+  day: {
+    error: false,
+    message: "",
+  },
+  month: {
+    error: false,
+    message: "",
+  },
+  year: {
+    error: false,
+    message: "",
+  },
 });
 
-const handleInput = (e) => {
-  console.log(e.target.value);
+const handleClick = () => {
   console.log(birthday);
+  console.log(birthdayErrors);
+
+  // validaciones para DD
+  if (birthday.day > 31 || birthday.day < 1 || birthday.day === null) {
+    birthdayErrors.day.error = true;
+    birthdayErrors.day.message = !birthday.day
+      ? "This field is required"
+      : "Must be a valid day";
+  } else {
+    birthdayErrors.day.error = false;
+    birthdayErrors.day.message = "";
+  }
+
+  // validaciones para MM
+  if (birthday.month === null || birthday.month < 1 || birthday.month > 12) {
+    birthdayErrors.month.error = true;
+    birthdayErrors.month.message = !birthday.month
+      ? "This field is required"
+      : "Must be a valid month";
+  } else {
+    birthdayErrors.month.error = false;
+    birthdayErrors.month.message = "";
+  }
+
+  // validaciones para YYYY
+  const currentYear = new Date().getFullYear(); // 2023
+  if (birthday.year === null || birthday.year < 0 || birthday.year > currentYear ){
+    birthdayErrors.year.error = true;
+    birthdayErrors.year.message = birthday.year === null ? "This field is required" : "Must be a valid year";
+  } else {
+    birthdayErrors.year.error = false;
+    birthdayErrors.year.message = "";
+  }
 };
 </script>
 
@@ -23,25 +68,41 @@ const handleInput = (e) => {
         <div class="form-group">
           <label for="">Day</label>
           <input
-            v-on:input="handleInput"
-            v-model="birthday.day"
+            v-bind:class="birthdayErrors.day.error ? 'input-error' : ''"
             type="number"
+            placeholder="DD"
+            v-model="birthday.day"
           />
+          <span>{{ birthdayErrors.day.message }}</span>
         </div>
         <div class="form-group">
           <label for="">Month</label>
-          <input v-model="birthday.month" type="number" />
+          <input
+            v-bind:class="birthdayErrors.month.error ? 'input-error' : ''"
+            type="number"
+            placeholder="MM"
+            v-model="birthday.month"
+          />
+          <span>{{ birthdayErrors.month.message }}</span>
         </div>
         <div class="form-group">
           <label for="">Year</label>
-          <input v-model="birthday.year" type="number" />
+          <input v-bind:class="birthdayErrors.year.error ? 'input-error':''" type="number" placeholder="YYYY" v-model="birthday.year" />
+          <span>{{ birthdayErrors.year.message }}</span>
         </div>
       </form>
 
+      <div class="divisor-container">
+        <hr class="divisor" />
+        <button v-on:click="handleClick" class="divisor__button">
+          <img src="./assets/images/icon-arrow.svg" />
+        </button>
+      </div>
+
       <div>
-        <p>{{ birthday.year }} years</p>
-        <p>{{ birthday.month }} months</p>
-        <p>{{ birthday.day }} days</p>
+        <p>{{}} years</p>
+        <p>{{}} months</p>
+        <p>{{}} days</p>
       </div>
     </div>
   </main>
@@ -78,11 +139,46 @@ const handleInput = (e) => {
 }
 
 .form-group input {
-  width: 80px;
+  width: 100px;
   height: 54px;
   border-radius: 8px;
   border: 1px solid var(--light-grey);
   text-align: center;
   font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.form-group span {
+  color: var(--light-red);
+  font-size: 0.6rem;
+  font-style: italic;
+}
+
+.divisor-container {
+  position: relative;
+}
+.divisor {
+  border: 1px solid var(--light-grey);
+  margin: 40px 0;
+}
+.divisor__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-color: var(--purple);
+  border-radius: 50%;
+  top: -30px;
+  right: 0;
+}
+
+.divisor__button img {
+  width: 36px;
+}
+
+.input-error {
+  border: 1px solid var(--light-red) !important;
 }
 </style>
